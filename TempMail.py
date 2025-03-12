@@ -259,7 +259,7 @@ class Window(CTk):
                                       fg_color="transparent",
                                       image=Icons.regenerate,
                                       width=5, height=5,
-                                      hover=True
+                                      hover=False
                                      ) 
         regenerate_button.grid(row=0, column=1, sticky=E, padx=5)
 
@@ -273,7 +273,7 @@ class Window(CTk):
 
         # Copy email button (copy to clipboard)
         copy_button = CTkButton(InnerFrame, text="",
-                                image=Icons.copy, hover=True,
+                                image=Icons.copy, hover=False,
                                 command=self._copy_email,
                                 fg_color="transparent",
                                 width=5, height=5
@@ -308,7 +308,7 @@ class Window(CTk):
                         )
 
         # -- HTML Frame (displays email content and default HTML page) --
-        self.HtmlFrame = HtmlFrame(self.PanedWindow, vertical_scrollbar=False,
+        self.HtmlFrame = HtmlFrame(self.PanedWindow, vertical_scrollbar=True,
                                    horizontal_scrollbar=False,
                                    messages_enabled=False
                                   ) 
@@ -345,8 +345,8 @@ class Window(CTk):
         screen_height = self.winfo_screenheight()
 
         # Constants for the desired window size as a percentage of the screen size
-        WIDTH_PERCENTAGE = 0.72
-        HEIGHT_PERCENTAGE = 0.77
+        WIDTH_PERCENTAGE = 0.80
+        HEIGHT_PERCENTAGE = 0.82
 
         # Calculate the window's width and height
         window_width = int(screen_width * WIDTH_PERCENTAGE)
@@ -585,9 +585,11 @@ class Window(CTk):
         for var in list(locals().keys()):
             if var != "delete_locals":
                 del locals()[var]
-
+    
         self.destroy()
-        exit()
+        
+        from sys import exit as _exit
+        _exit(1)
 
 
 if __name__ == "__main__":
