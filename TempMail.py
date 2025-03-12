@@ -267,7 +267,7 @@ class Window(CTk):
         # A field for showing the current email to user
         self.email_entry = CTkEntry(InnerFrame, corner_radius=50,
                                     height=50, width=250, state=DISABLED,
-                                    font=self.FONT(13, NORMAL)
+                                    font=self.FONT(14, NORMAL)
                                    ) 
         self.email_entry.grid(row=1, column=0)
 
