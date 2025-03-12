@@ -1,7 +1,7 @@
 from string import ascii_lowercase, ascii_uppercase, digits
 from Modules.UserAgents import user_agents
 from datetime import datetime, timezone
-from Modules.Core import Core, Agent
+from Modules.CoreB import Core, Agent
 from random import choice, choices
 from requests import get, post
 from time import sleep
