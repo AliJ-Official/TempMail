@@ -20,9 +20,9 @@
 
 ---
 ## 📸 Screenshots
-![](./Screenshots/Dark-Theme.png)
+![](Screenshots/Dark-Theme.PNG)
 
-![](./Screenshots/Light-Theme.png)
+![](Screenshots/Light-Theme.PNG)
 ---
 
 ## 📂 Project Structure
