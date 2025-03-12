@@ -36,9 +36,10 @@
 ├── 📂 ScreenShots/      # Contains UI Screenshots
 ├── 📄 Auto_Installer.bat # Auto-installer script for Windows
 ├── 📄 Index.html        # HTML file used in the UI
+├── 📄 LICENSE  
 ├── 📄 README.md         # Project documentation
-├── 📄 requirements.txt  # Lists all required dependencies
-└── 📄 TempMail.py       # Main application script
+├── 📄 TempMail.py       # Main application script
+└── 📄 requirements.txt  # Lists all required dependencies
 ```
 ---
 ## 🛠️ Installation
