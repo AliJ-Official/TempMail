@@ -33,6 +33,7 @@
 │   ├── 📄 __init__.py   # Python import modules manager
 │   ├── 📄 UserAgents.py # Handles user-agent strings
 │   └── 📄 CoreB.py      # Core functionality module
+├── 📂 ScreenShots/      # Contains UI Screenshots
 ├── 📄 Auto_Installer.bat # Auto-installer script for Windows
 ├── 📄 Index.html        # HTML file used in the UI
 ├── 📄 README.md         # Project documentation
@@ -157,5 +158,3 @@ TempMail is licensed under the **MIT License**. See the [LICENSE](LICENSE) file 
 ---
 
 **Thank you for using TempMail!** If you encounter any issues or have suggestions for improvement, feel free to open an issue or contribute to the project.
-
----
