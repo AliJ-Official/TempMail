@@ -33,7 +33,7 @@
 │   ├── 📄 __init__.py   # Python import modules manager
 │   ├── 📄 UserAgents.py # Handles user-agent strings
 │   └── 📄 CoreB.py      # Core functionality module
-├── 📂 ScreenShots/      # Contains UI Screenshots
+├── 📂 Screenshots/      # Contains UI Screenshots
 ├── 📄 Auto_Installer.bat # Auto-installer script for Windows
 ├── 📄 Index.html        # HTML file used in the UI
 ├── 📄 LICENSE  
