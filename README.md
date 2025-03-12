@@ -23,7 +23,6 @@
 ![](Screenshots/Dark-Theme.PNG)
 
 ![](Screenshots/Light-Theme.PNG)
----
 
 ## 📂 Project Structure
 
