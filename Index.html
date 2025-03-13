@@ -1,181 +1,189 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>TempMail - Disposable Email Service</title>
-        <style type="text/css">
-            /* General Reset */
-            body, h1, h2, p, ul, li, a, img {
-                margin: 0;
-                padding: 0;
-                border: 0;
-                outline: 0;
-                font-size: 100%;
-                vertical-align: baseline;
-                background: transparent;
-            }
+<html lang="en">
 
-            body {
-                font-family: 'Arial', sans-serif;
-                background-color: #001f3f;
-                color: #ffffff;
-                text-align: center; /* Center the container */
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TempMail - Disposable Email Service</title>
+    <style>
+        /* General Reset */
+        body, h1, h2, p, ul, li, a, img {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            outline: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+            background: transparent;
+        }
 
-            .container {
-                background-color: rgba(255, 255, 255, 0.1);
-                border-radius: 15px;
-                padding: 20px;
-                width: 90%;
-                max-width: 860px;
-                margin: 20px auto; /* Center the container horizontally */
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #001f3f;
+            color: #ffffff;
+            text-align: center;
+        }
 
-            .header {
-                margin-bottom: 20px;
-            }
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 860px;
+            margin: 20px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
 
-            .icon {
-                width: 80px;
-                height: 80px;
-                margin-bottom: 10px;
-            }
+        .header {
+            margin-bottom: 20px;
+        }
 
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .program-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #87CEFA;
+        }
+
+        .content {
+            text-align: left;
+        }
+
+        .p-line {
+            font-size: 19px;
+            display: block;
+            padding: 1px 0;
+        }
+
+        .introduction {
+            font-size: 19px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: #f0f0f0;
+        }
+
+        .contacts h2 {
+            margin-top: 15px;
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #87CEFA;
+        }
+
+        .contacts ul {
+            list-style-type: none;
+            padding-left: 25px;
+        }
+
+        .contacts ul li {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #f0f0f0;
+        }
+
+        .contacts ul li a {
+            font-size: 1.2em;
+            color: lightskyblue;
+            text-decoration: none;
+            font-weight: 100;
+        }
+
+        .contacts ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 1em;
+            color: #f0f0f0;
+            border-top: 1px solid lightskyblue;
+            padding-top: 15px;
+        }
+
+        .footer a {
+            color: #87CEFA;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        /* Responsive Design */
+        @media all and (max-width: 768px) {
             .program-name {
-                font-size: 2.5em; /* Using em for relative sizing */
-                font-weight: bold;
-                color: #87CEFA;
-            }
-
-            .content {
-                text-align: left; /* Restore left alignment for content inside the container */
+                font-size: 2em;
             }
 
             .introduction {
-                font-size: 1em;
-                line-height: 1.6;
-                margin-bottom: 20px;
-                font-weight: 500;
-                color: #f0f0f0;
+                font-size: 0.9em;
             }
 
             .contacts h2 {
-                margin-top: 15px;
-                font-size: 1.5em;
-                margin-bottom: 10px;
-                color: #87CEFA;
-            }
-
-            .contacts ul {
-                list-style-type: none;
-                padding-left: 25px;
+                font-size: 1.3em;
             }
 
             .contacts ul li {
-                font-size: 1em;
-                margin-bottom: 10px;
-                color: #f0f0f0;
+                font-size: 0.8em;
             }
 
-            .contacts ul li a {
-                font-size: 1.2em;
-                color: lightskyblue;
-                text-decoration: none;
-                font-weight: 100;
+            .icon {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media all and (max-width: 480px) {
+            .container {
+                padding: 15px;
             }
 
-            .contacts ul li a:hover {
-                text-decoration: underline;
+            .introduction {
+                line-height: 1.4;
             }
+        }
+    </style>
+</head>
 
-            .footer {
-                margin-top: 25px;
-                text-align: center;
-                font-size: 1em;
-                color: #f0f0f0;
-                border-top: 1px solid lightskyblue;
-                padding-top: 15px;
-            }
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="Icons/email.png" alt="Program Icon" class="icon">
+            <h1 class="program-name">TempMail - Temporary Email Service</h1>
+        </div>
+        <div class="content">
 
-            .footer a {
-                color: #87CEFA;
-                text-decoration: none;
-            }
+            <p class="introduction">
+                Welcome to <b>TempMail</b>, a Python-based program to generate secure, disposable email addresses. 
+                <br>Your personal email remains confidential while utilizing the TempMail inbox for sign-ups, verifications.
+                <br>Your temporary inbox will remain active for the duration of your session, after which all emails will be automatically deleted upon closing the program. 
+                <br>TempMail ensures complete privacy and convenience during your use of the service.
+                <br>Thank you for choosing TempMail!
+            </p>
 
-            .footer a:hover {
-                text-decoration: underline;
-            }
-
-            .footer p {
-                margin: 5px 0;
-            }
-
-            /* Responsive Design (Simplified) */
-            /* Basic approach using percentage-based widths and font sizes */
-            @media all and (max-width: 768px) {
-                .program-name {
-                    font-size: 2em;
-                }
-
-                .introduction {
-                    font-size: 0.9em;
-                }
-
-                .contacts h2 {
-                    font-size: 1.3em;
-                }
-
-                .contacts ul li {
-                    font-size: 0.8em;
-                }
-
-                .icon {
-                    width: 60px;
-                    height: 60px;
-                }
-            }
-
-            @media all and (max-width: 480px) {
-                .container {
-                    padding: 15px;
-                }
-
-                .introduction {
-                    line-height: 1.4;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <img src="Icons/email.png" alt="Program Icon" class="icon">
-                <h1 class="program-name">TempMail - Temporary Email Service</h1>
-            </div>
-            <div class="content">
-                <p class="introduction">
-                    <i>
-                        Welcome to <b><u>TempMail</u></b>, your secure temporary email solution!<br>
-                        This program provides you with an instant disposable email address
-                        that you can use for online registrations, verifications, and
-                        one-time signups without revealing your personal email.<br>
-                        Your temporary inbox will remain active during this session.
-                        All emails will be automatically deleted when you close the program.
-                    </i>
-                </p>
-
-                <div class="contacts">
-                    <h2>Contact Us</h2>
-                    <ul>
-                        <li><b>GitHub: </b><a href="https://github.com/AliJ-Official">AliJ-Official</a></li>
-                        <li><b>Gmail: </b><a href="mailto:ewxyz.py@gmail.com">ewxyz.py@gmail.com</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer">
-                <p>Based on <a href="https://mail.tm">mail.tm</a> and uses the <a href="https://api.mail.tm">mail.tm API</a>.</p>
+            <div class="contacts">
+                <h2>Contact Us</h2>
+                <ul style="font-size: 16px;">
+                    <li><b>GitHub: </b><a href="https://github.com/AliJ-Official">AliJ-Official</a></li>
+                    <li><b>Gmail: </b><a href="mailto:ewxyz.py@gmail.com">ewxyz.py@gmail.com</a></li>
+                </ul>
             </div>
         </div>
-    </body>
+
+        <div class="footer">
+            <p style="font-size: 16px;">Based on <a href="https://mail.tm">mail.tm</a> and uses the <a href="https://api.mail.tm">mail.tm API</a>.</p>
+        </div>
+    </div>
+</body>
+
 </html>
