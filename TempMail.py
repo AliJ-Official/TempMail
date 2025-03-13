@@ -588,7 +588,7 @@ class Window(CTk):
     
         self.destroy()
         
-        from sys import exit as _exit
+        from os import _exit
         _exit(1)
 
 
