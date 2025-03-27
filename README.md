@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-**TempMail** is a Python-based GUI application designed to provide users with temporary email addresses and inbox management. Built with simplicity and anonymity in mind, it leverages the **mail.tm API** to create disposable email accounts, making it perfect for signing up on websites or services without revealing your personal email.
+**TempMail** is a Python-based GUI program designed to provide users with temporary email addresses and inbox management. Built with simplicity and anonymity in mind, it leverages the **mail.tm API** to create disposable email accounts, making it perfect for signing up on websites or services without revealing your personal email.
 
 ---
 
@@ -61,27 +61,7 @@
    Auto_Installer.bat
    ```
 
-4. Follow the on-screen instructions to select your Python version and complete the installation. You can activate the Virtual Environment immediately or manually later.
-
-5. Activate the Virtual Environment:
-   ```bash
-   .venv/Scripts/activate.bat
-   ```
-
-6. Run the program:
-   ```bash
-   python TempMail.py
-   ```
-
-7. Alternatively, run the program without activating the Virtual Environment:
-   ```bash
-   .venv/Scripts/python.exe TempMail.py
-   ```
-
-- To deactivate the Virtual Environment:
-   ```bash
-   deactivate
-   ```
+4. Follow the on-screen instructions to select your Python version and complete the installation. You can run the program immediately.
 
 ---
 
@@ -113,14 +93,14 @@
    python TempMail.py
    ```
 
-6. Alternatively, run the program without activating the Virtual Environment:
-   ```bash
-   .venv/Scripts/python.exe TempMail.py
-   ```
-
-- To deactivate the Virtual Environment:
+6. At the end deactivate the Virtual Environment:
    ```bash
    deactivate
+   ```
+
+- Alternatively, you can run the program without activating the Virtual Environment:
+   ```bash
+   .venv/Scripts/python.exe TempMail.py
    ```
 
 ---
