@@ -1,6 +1,17 @@
 @echo off
 setlocal enabledelayedexpansion
 
+:: ----------------------------------------------------------------------
+:: Auto Installer Script...
+:: This script automates the setup process for the TempMail project.
+:: It performs the following steps:
+:: 1. Checks for an active internet connection.
+:: 2. Detects installed Python versions on the system.
+:: 3. Prompts the user to select a Python version for creating a virtual environment.
+:: 4. Installs dependencies from requirements.txt (if available) in project dir.
+:: 5. Optionally runs the TempMail program immediately.
+:: ----------------------------------------------------------------------
+
 :: Step 1: Check Internet Connection
 :: Pings Google to check for an active internet connection.
 :: If no connection is detected, notify the user and exit.
@@ -18,7 +29,7 @@ cls
 
 :: Step 2: Detect Installed Python Versions
 :: Find all Python executables installed on the system and store them in a temporary file.
-echo Installed versions of Python on your system:
+echo Detecting installed Python versions on your system...
 where python > temp_python_versions.txt 2>nul
 
 set "index=0"
@@ -34,7 +45,7 @@ del temp_python_versions.txt 2>nul
 
 :: If no Python installations are detected, notify the user and exit.
 if %index%==0 (
-    echo No Python installations detected. Install Python and try again. & echo.
+    echo No Python installations detected. Please install Python and try again. & echo.
     pause
     exit /b
 )
@@ -47,7 +58,7 @@ set /p choice=Which Python version do you want to use?
 
 :: Validate the user selection.
 if not defined python%choice% (
-    echo Invalid selection. & echo.
+    echo Invalid selection. Please try again. & echo.
     pause
     exit /b
 )
@@ -71,23 +82,28 @@ if not exist .venv\Scripts\activate (
 :: Step 5: Install Dependencies (If requirements.txt Exists)
 :: Check for a 'requirements.txt' file and install dependencies if found.
 if exist requirements.txt (
-    echo Installing dependencies... & echo.
+    echo Installing dependencies from requirements.txt... & echo.
     .venv\Scripts\python.exe -m pip install -r requirements.txt
-
     cls
-
     echo Installation complete. & echo.
+
 ) else (
     echo No requirements.txt found. Skipping dependency installation. & echo.
 )
 
-:: Step 6: Ask User to Activate Virtual Environment
-:: Prompt user if they want to activate the virtual environment immediately.
-set /p "choice=Do you want to activate the Virtual Environment (Y/N)? "
+:: Step 6: Ask User to Run the Program
+:: Prompt the user if they want to run the TempMail program immediately.
+set /p "choice=Do you want to run the program right now (Y/N)? "
 
 if /I "%choice%" == "y" (
-    cls
-    cmd /k ".venv\Scripts\activate.bat"
+    cls 
+    echo Running TempMail program...
+    .venv\Scripts\python.exe TempMail.py
+    pause
+
 ) else (
-    echo You can manually activate the Virtual Environment using ".venv\Scripts\activate.bat"
+    cls
+    echo You can run the program anytime using the command:
+    echo     ".venv\Scripts\python.exe TempMail.py" & echo.
+    pause
 )
