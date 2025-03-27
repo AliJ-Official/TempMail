@@ -218,7 +218,7 @@ class Window(CTk):
         TopFrame.columnconfigure((0,1,2), weight=1)
         # Bind right-click on TopFrame button to load the default html
         TopFrame.bind("<Button-1>", 
-                lambda event: self.HtmlFrame.load_html(default_html)
+                lambda event: self._load_default_html()
             )
         
         # Theme toggle button (sun/moon icon)
@@ -304,7 +304,7 @@ class Window(CTk):
                                     ) 
         self.inbox_list.pack(expand=True, fill=BOTH)
         self.inbox_list.bind("<Button-1>",
-                            lambda event: self.HtmlFrame.load_html(default_html)
+                            lambda event: self._load_default_html()
                         )
 
         # -- HTML Frame (displays email content and default HTML page) --
@@ -314,6 +314,8 @@ class Window(CTk):
                                   ) 
         # Load the default HTML page for first time
         self.HtmlFrame.load_html(default_html) 
+        self.is_default_html = True
+
         # Deactivating the mousewheel
         self.unbind_all("<MouseWheel>") 
         # To Open The Links in Browser
@@ -404,6 +406,15 @@ class Window(CTk):
             
             # Set the background color of the PanedWindow to Light mode color
             self.PanedWindow.configure(background="#ebebeb")
+
+    def _load_default_html(self) -> None:
+        """
+        Loads the default HTML content into the HtmlFrame if it is not already loaded.
+        This prevents redundant reloads and ensures the default page is displayed.
+        """
+        if not self.is_default_html:
+            self.HtmlFrame.load_html(default_html)
+            self.is_default_html = True
 
     def _is_online(self) -> bool:
         """
@@ -549,7 +560,9 @@ class Window(CTk):
         """
         if not self.is_generating_email:
             self.Core.add_task(Agent(self.generate_email))
-    
+
+        self._load_default_html()
+
     def update_inbox(self) -> None:
         """
         Updates the inbox with new messages and displays them in the UI.
@@ -580,6 +593,7 @@ class Window(CTk):
         """
         message_content = self.inbox[header]
         self.HtmlFrame.load_html(message_content)
+        self.is_default_html = False
 
     def _on_closing(self) -> None:
         for var in list(globals().keys()):
