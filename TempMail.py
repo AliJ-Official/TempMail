@@ -345,15 +345,19 @@ class Window(CTk):
         screen_height = self.winfo_screenheight()
 
         # Constants for the desired window size as a percentage of the screen size
-        WIDTH_PERCENTAGE = 0.80
-        HEIGHT_PERCENTAGE = 0.82
+        WIDTH_PERCENTAGE = 0.75
+        HEIGHT_PERCENTAGE = 0.77
 
         # Calculate the window's width and height
         window_width = int(screen_width * WIDTH_PERCENTAGE)
         window_height = int(screen_height * HEIGHT_PERCENTAGE)
 
-        # Set the window size and make it non-resizable
-        self.geometry(f"{window_width}x{window_height}")
+        # Calculate the position to center the window
+        x_position = (screen_width - window_width) // 2
+        y_position = (screen_height - window_height) // 2
+
+        # Set the window size position and make it non-resizable
+        self.geometry(f"{window_width}x{window_height}+{x_position}+{y_position}")
         self.resizable(False, False)
 
     def _raise_window(self) -> None:
