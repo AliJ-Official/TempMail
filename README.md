@@ -51,7 +51,7 @@
    git clone https://github.com/AliJ-Official/TempMail.git
    ```
 
-- If you don't have git installed on your system, you can download the zip file and follow the steps below.
+- If you don't have git installed on your system, you can download the zip file from this [link](https://codeload.github.com/AliJ-Official/TempMail/zip/refs/heads/main) and follow the steps below.
 
 2. Navigate to the TempMail directory.
 
@@ -67,7 +67,8 @@
    ```bash
    git clone https://github.com/AliJ-Official/TempMail.git
    ```
-- If you don't have git installed on your system, you can download the zip file and follow the steps below.
+- If you don't have git installed on your system, you can download the zip file from this [link](https://codeload.github.com/AliJ-Official/TempMail/zip/refs/heads/main) and follow the steps below.
+
 
 2. Navigate to the TempMail directory.
 
