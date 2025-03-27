@@ -55,7 +55,7 @@
 
 2. Navigate to the TempMail directory.
 
-3. Ensure you have an active internet connection and run the **Auto_Installer.bat** script.
+3. Ensure you have an active internet connection and run the **AutoInstaller.bat** script.
 
 5. Follow the on-screen instructions to select your Python version and complete the installation. You can run the program immediately.
 
