@@ -46,54 +46,50 @@
 
 ### 🔹 Automatic Installation (Recommended)
 
-1. Clone the repository:
+1. Clone the repository using this command:
    ```bash
    git clone https://github.com/AliJ-Official/TempMail.git
    ```
 
-2. Navigate to the project directory:
-   ```bash
-   cd TempMail
-   ```
+- If you don't have git installed on your system, you can download the zip file and follow the steps below.
 
-3. Ensure you have an active internet connection and run the installation script:
-   ```bash
-   Auto_Installer.bat
-   ```
+2. Navigate to the TempMail directory.
 
-4. Follow the on-screen instructions to select your Python version and complete the installation. You can run the program immediately.
+3. Ensure you have an active internet connection and run the **Auto_Installer.bat** script.
+
+5. Follow the on-screen instructions to select your Python version and complete the installation. You can run the program immediately.
 
 ---
 
 ### 🔹 Manual Installation
 
-1. Clone the repository:
+1. Clone the repository using this command:
    ```bash
    git clone https://github.com/AliJ-Official/TempMail.git
    ```
+- If you don't have git installed on your system, you can download the zip file and follow the steps below.
 
-2. Navigate to the project directory:
-   ```bash
-   cd TempMail
-   ```
+2. Navigate to the TempMail directory.
 
-3. Create and activate a Virtual Environment (recommended):
+3. Open powershell or cmd in TempMail directory.
+
+4. Create and activate a Virtual Environment (recommended):
    ```bash
    python -m venv .venv
    .venv/Scripts/activate.bat
    ```
 
-4. Install the required dependencies:
+5. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-5. Run the program:
+6. Run the program:
    ```bash
    python TempMail.py
    ```
 
-6. At the end deactivate the Virtual Environment:
+- To deactivate the Virtual Environment:
    ```bash
    deactivate
    ```
