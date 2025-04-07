@@ -1,6 +1,6 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./Icons/email.ico">
+    <source media="(prefers-color-scheme: dark)" srcset="./Icons/TempMail.ico">
     <img src="./Icons/TempMail.ico">
   </picture>
 </p>
