@@ -28,18 +28,18 @@
 
 ```
 📂 TempMail/
-├── 📂 Icons/            # Contains all UI icons and images
-├── 📂 Modules/          # Contains helper classes and modules
-│   ├── 📄 __init__.py   # Python import modules manager
-│   ├── 📄 UserAgents.py # Handles user-agent strings
-│   └── 📄 CoreB.py      # Core functionality module
-├── 📂 Screenshots/      # Contains UI Screenshots
-├── 📄 Auto_Installer.bat # Auto-installer script for Windows
-├── 📄 Index.html        # HTML file used in the UI
+├── 📂 Icons/             # Contains all UI icons and images
+├── 📂 Modules/           
+│   ├── 📄 __init__.py     # Python import modules manager
+│   ├── 📄 TempMail_API.py # Handles application backend 
+│   └── 📄 CoreB.py        # Core functionality module
+├── 📂 Screenshots         # Contains UI Screenshots
+├── 📄 Auto_Installer.bat  # AutoInstaller script for Windows
+├── 📄 HomePage.html       # HomePage HTML file for UI
 ├── 📄 LICENSE  
-├── 📄 README.md         # Project documentation
-├── 📄 TempMail.py       # Main application script
-└── 📄 requirements.txt  # Lists all required dependencies
+├── 📄 README.md           # Project documentation
+├── 📄 TempMail.py         # GUI application script
+└── 📄 requirements.txt    # Lists all required dependencies
 ```
 ---
 ## 🛠️ Installation
