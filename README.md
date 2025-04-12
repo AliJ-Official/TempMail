@@ -20,9 +20,9 @@
 
 ---
 ## 📸 Screenshots
-![](Screenshots/Dark_Theme.PNG)
+![](Screenshots/DarkTheme.PNG)
 
-![](Screenshots/Light_Theme.PNG)
+![](Screenshots/LightTheme.PNG)
 
 ## 📂 Project Structure
 
@@ -105,7 +105,15 @@
 ## 🚧 Limitations
 
 - **Third-Party Dependency**: TempMail relies on the [mail.tm API](https://mail.tm). If the API is down or unavailable, the program will not function as expected.
+- **Notifications Blocked**: TempMail uses system notifications to alert users about new emails and other events. If notifications are blocked in your Windows settings, these features will not work. 
 
+    ### How to Enable Notifications in Windows:
+   1. Open the **Settings** app on your Windows system.
+   2. Navigate to **System** > **Notifications & actions**.
+   3. Ensure the **Get notifications from apps and other senders** option is turned **On**.
+   4. Ensure that **Focus Assist** is turned off or configured to allow notifications.
+
+   By enabling notifications, you can ensure a better user experience with real-time alerts.
 ---
 
 ## 🤝 Contributing
