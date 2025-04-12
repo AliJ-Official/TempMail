@@ -56,9 +56,10 @@ class TempMailGUI(CTk):
         super().__init__()
 
         # Initialize variables and flags
-        self.__connection_status: bool = self._is_online()
+        self.__connection_status: bool = self._is_online() 
         self.__is_generating_email: bool = True # Flag to prevent multiple email generations
         self.__is_on_homepage: bool = False # Flag to check if the homepage is loaded
+        self.__is_tasks_running: bool = True # Flag to handle the background tasks
         self.__homepage: str = None # HTML content for the homepage
         self.__tempmail: TempMail = None # Temporary email object
         self.__inbox: dict = {} # Dictionary to store inbox messages
@@ -366,15 +367,15 @@ class TempMailGUI(CTk):
         # Load the homepage content into the HtmlFrame
         self._load_homepage()
 
+        # Clear the internal inbox dictionary
+        self.__inbox.clear()
+
         # Clear the inbox list in the UI
         self.inbox_list.delete(0, END)
         
         # Reset the inbox message counter in the UI
         self.inbox_counter_lbl.configure(text=f"0 Messages")
         
-        # Clear the internal inbox dictionary
-        self.__inbox.clear()
-
     def _is_online(self) -> bool:
         """
         Checks if the device has an active internet connection by sending HTTP GET requests to multiple external URLs.
@@ -416,7 +417,7 @@ class TempMailGUI(CTk):
         """
         Periodically checks the internet connection and updates the connection-status icon.
         """
-        while True:
+        while self.__is_tasks_running:
             if self._is_online():
                 # If online, update the connection-status icon to online icon
                 self.connection_status_ico.configure(image=Icons.online)
@@ -436,7 +437,7 @@ class TempMailGUI(CTk):
         """
 
         # if device was online
-        if self.__connection_status:
+        if self.__connection_status and self.__is_tasks_running:
 
             self.__is_generating_email = True
 
@@ -445,7 +446,7 @@ class TempMailGUI(CTk):
             self.email_entry.insert(END, "Generating email...")
             self.email_entry.configure(state=DISABLED)
 
-            while True:
+            while self.__is_tasks_running:
                 try:
                     # Attempt to generate a temporary email address
                     self.__tempmail = TempMail()
@@ -502,7 +503,7 @@ class TempMailGUI(CTk):
 
         This method runs continuously in a loop and updates the inbox every 3 seconds.
         """
-        while True:
+        while self.__is_tasks_running:
             # Check if the device is online and a temporary email address has been created
             if self.__connection_status and self.__tempmail:
 
@@ -527,7 +528,7 @@ class TempMailGUI(CTk):
 
                         # Display a notification for the new message
                         self._notification_popup(
-                            lambda: self._raise_window(True),
+                            self._raise_window,
                             "New Message",
                             mail.from_addr,
                             mail.subject
@@ -557,6 +558,8 @@ class TempMailGUI(CTk):
         - Destroys the application window.
         - Exits the program using a low-level system exit to ensure complete termination.
         """
+        self.__is_tasks_running = False
+
         # Delete all global variables except essential ones
         for var in list(globals().keys()):
             if var not in ["__name__", "__file__", "__doc__", "__builtins__"]:
@@ -571,9 +574,9 @@ class TempMailGUI(CTk):
         self.destroy()
         
         # Exit the program completely
-        from os import _exit
+        from sys import exit as _exit
         _exit(0)
-
+        
 
 if __name__ == "__main__":
     # Initialize the GUI application
