@@ -54,14 +54,17 @@ class TempMailGUI(CTk):
         user interface components, and background tasks.
         """
         super().__init__()
-        
+
         # Initialize variables and flags
-        self.__connection_status = self._is_online()
-        self.__is_generating_email = True # Flag to prevent multiple email generations
-        self.__is_on_homepage = False # Flag to check if the homepage is loaded
-        self.__homepage = None # HTML content for the homepage
-        self.__tempmail = None # Temporary email object
-        self.__inbox = {} # Dictionary to store inbox messages
+        self.__connection_status: bool = self._is_online()
+        self.__is_generating_email: bool = True # Flag to prevent multiple email generations
+        self.__is_on_homepage: bool = False # Flag to check if the homepage is loaded
+        self.__homepage: str = None # HTML content for the homepage
+        self.__tempmail: TempMail = None # Temporary email object
+        self.__inbox: dict = {} # Dictionary to store inbox messages
+
+        # Bring the application window to the front and ensure it is focused
+        self._raise_window()
 
         # Initialize master window
         self.title("TempMail")
@@ -73,7 +76,7 @@ class TempMailGUI(CTk):
         self.columnconfigure(0, weight=1)
         
         # Set up font for the application
-        self.FONT = lambda size, w: CTkFont("Ubuntu", size, w)
+        self.FONT = lambda size, w: CTkFont("Roboto", size, w)
 
         # A protocol to handle the window close event to clean up resources.
         self.protocol("WM_DELETE_WINDOW", self._on_closing)  
@@ -89,7 +92,7 @@ class TempMailGUI(CTk):
         # Bind right-click on TopFrame to load the homepage
         ToolBarFrame.bind(
             "<Button-1>", 
-            lambda event: self._load_homepage()
+            lambda event: self._click_on_free_space()
             )
         
         # Define switch-theme button (light/dark mode)
@@ -157,22 +160,39 @@ class TempMailGUI(CTk):
         # A listbox for showing the inbox messages
         self.inbox_list = CTkListbox(InboxFrame, corner_radius=0,
                                      fg_color="transparent",
-                                     border_width=0, width=300,
+                                     border_width=0, width=290,
                                      command=self._open_mails,
                                     ) 
         self.inbox_list.pack(expand=True, fill=BOTH)
 
-        # Bind right-click on inbox-list to load the homepage
+        # Bind right-click on 
         self.inbox_list.bind(
             "<Button-1>",
-            lambda event: self._load_homepage()
+            lambda event: self._click_on_free_space()
             )
+        
+        LableFrame = CTkFrame(InboxFrame, border_width=0,
+                               fg_color="transparent")
+        LableFrame.pack(fill=BOTH)
+
+        CTkLabel(LableFrame, text="Inbox",
+                 font=self.FONT(27, "bold")
+                ).grid(row=0, column=0, sticky=W, padx=6)
+        
+        self.inbox_counter_lbl = CTkLabel(LableFrame, text="0 Messages",
+                                            font=self.FONT(15, "normal"),
+                                           )
+        self.inbox_counter_lbl.grid(row=0, column=1, sticky=W)
 
         # Initialize HTMLFrame (displays homepage and mails content)
         self.HtmlFrame = HtmlFrame(self.PanedWindow, vertical_scrollbar="auto",
                                    horizontal_scrollbar="auto",
                                    messages_enabled=False
                                   ) 
+        # Bind To Open The Links in Browser
+        self.HtmlFrame.on_link_click(lambda url: open_in_browser(url))
+        # Deactivating the mousewheel
+        self.unbind_all("<MouseWheel>")
 
         # Add InboxFrame and HTML-frame into PanedWindow
         self.PanedWindow.add(InboxFrame)
@@ -182,18 +202,19 @@ class TempMailGUI(CTk):
             # Try to load homepage from HTML file
             with open("HomePage.html", "r") as f:
                 self.__homepage = f.read()
+
         except FileNotFoundError:
             # If HTML file is not found, set a default 404 error message
-            self.__homepage = '<html><body style="background-color: #001f3f;"><h1 style="color: #FFFFFF;">404 HomePage Not Found ;(</h1></body></html>'
+            self.__homepage = """
+            <html>
+                <body style="background-color: #001f3f;">
+                    <h1 style="color: #FFFFFF;">404 HomePage Not Found ;(</h1>
+                </body>
+            </html>
+            """
 
         # Load homepage for first time
         self._load_homepage()
-
-        # Deactivating the mousewheel
-        self.unbind_all("<MouseWheel>")
-
-        # Bind To Open The Links in Browser
-        self.HtmlFrame.on_link_click(lambda url: open_in_browser(url))
 
         # Initialize background tasks
         background_tasks = [
@@ -219,8 +240,8 @@ class TempMailGUI(CTk):
         SCREEN_HEIGHT = self.winfo_screenheight()
 
         # Calculate the window's width and height
-        MASTER_WIDTH = int(SCREEN_WIDTH * 0.75)
-        MASTER_HEIGHT = int(SCREEN_HEIGHT * 0.77)
+        MASTER_WIDTH = int(SCREEN_WIDTH * 0.80)
+        MASTER_HEIGHT = int(SCREEN_HEIGHT * 0.80)
 
         # Calculate the position to center the window
         X = (SCREEN_WIDTH - MASTER_WIDTH) // 2
@@ -235,16 +256,22 @@ class TempMailGUI(CTk):
         # Remove useless variables
         del SCREEN_WIDTH, SCREEN_HEIGHT, MASTER_WIDTH, MASTER_HEIGHT, X, Y
 
-    def _raise_window(self) -> None:
+    def _raise_window(self, load_content: bool = False) -> None:
         """
-        Brings the window to the front and ensures it has focus. 
-        This method is useful for making the window the active, top-most window in the UI.
+        Brings the window to the front and ensures it has focus.
+
+        Args:
+            load_content (bool): If True, it loads the new message content in the HtmlFrame.
         """
         # Bring the window to the front of other windows
         self.lift()
         
         # Force focus on the window to ensure it's the active window
         self.focus_force()
+        
+        # Optionally activate the last item in the inbox list
+        if load_content:
+            self.inbox_list.activate(END)
 
     def _notification_popup(self, on_click: callable, *args) -> None:
         """
@@ -280,7 +307,6 @@ class TempMailGUI(CTk):
             changes the theme button icon to a moon icon, 
             and updates the background color of the PanedWindow.
         """
-
         match get_appearance_mode():
 
             case "Light":
@@ -315,7 +341,32 @@ class TempMailGUI(CTk):
         if not self.__is_on_homepage:
             self.HtmlFrame.load_html(self.__homepage)
             self.__is_on_homepage = True
-    
+
+    def _click_on_free_space(self):
+        """
+        Handles the event when the user clicks on free space in the application.
+        
+        - Loads the homepage content into the HtmlFrame.
+        - Attempts to deactivate the currently selected item in the inbox list.
+        """
+
+        self._load_homepage()
+
+        try:
+            self.inbox_list.deactivate(self.inbox_list.curselection())
+        except TypeError:
+            ...
+
+    def _reset_to_default(self) -> None:
+        self._load_homepage()
+
+        # Clear the inbox and inbox_list
+        self.inbox_list.delete(0, END)
+        # Reset the Inbox counter
+        self.inbox_counter_lbl.configure(text=f"0 Messages")
+        # Clear the inbox dictionary
+        self.__inbox.clear()
+
     def _is_online(self) -> bool:
         """
         Checks if the device has an active internet connection by sending HTTP requests to two external URLs.
@@ -327,11 +378,21 @@ class TempMailGUI(CTk):
             bool: True if either of the requests is successful (status code 200), False otherwise.
         """
         try:
-            response1 = get("https://google.com", timeout=5)
-            response2 = get("http://mojeip.net.pl/asdfa/azenv.php", timeout=5)
-
-            return response1.status_code == 200 or response2.status_code == 200
-          
+            
+            response1 = get("http://mojeip.net.pl/asdfa/azenv.php", timeout=5)
+            if response1.status_code == 200:
+                return True
+            
+            response2 = get("https://github.com", timeout=5)
+            if response2.status_code == 200:
+                return True
+            
+            response3 = get("https://google.com", timeout=5)
+            if response3.status_code == 200:
+                return True
+            
+            return False
+        
         except:
             return False
 
@@ -385,10 +446,8 @@ class TempMailGUI(CTk):
                                             self.__tempmail.email,
                                             "Tap to copy"
                                            )
-                    # Clear the inbox and inbox_list
-                    self.__inbox.clear()
-                    self.inbox_list.delete(0, END)
                     
+                    self._reset_to_default()
                     break
 
                 except:
@@ -413,26 +472,32 @@ class TempMailGUI(CTk):
         """
         if not self.__is_generating_email:
             self.Core.add_task(Agent(self.generate_email))
-
-        self._load_homepage()
-    
+   
     def update_inbox(self) -> None:
         """
         Updates the inbox with new messages and displays them in the UI.
         """
         while True:
             if self.__connection_status and self.__tempmail: # if internet was connected and email was created
-                mails = self.__tempmail.get_messages() # All received messages
+
+                # All received messages
+                mails = self.__tempmail.get_messages() 
 
                 for mail in mails:
                     header = f"{mail.subject}\n{mail.from_addr} <{mail.sent_time}>"
 
                     if header not in self.__inbox: # Prevent duplicate message
-                        self.__inbox.update({header: mail.html})
-                        self.inbox_list.insert(END, header) # Insert into the inbox list in UI
 
-                        self._notification_popup(self._raise_window,
+                        # Add new message in inbox dictionary
+                        self.__inbox.update({header: mail.html}) 
+                        # Insert into the inbox list in UI
+                        self.inbox_list.insert(END, header) 
+                        # Update Inbox counter in UI
+                        self.inbox_counter_lbl.configure(text=f"{len(self.__inbox)} Messages") 
+                        # Show Notification when new message arrived
+                        self._notification_popup(lambda: self._raise_window(True),
                                                 "New Message", mail.from_addr, mail.subject)
+
             # Update inbox every 3 second
             sleep(3)
 
@@ -460,10 +525,10 @@ class TempMailGUI(CTk):
         self.destroy()
         
         from os import _exit
-        _exit(1)
+        _exit(0)
 
 
 if __name__ == "__main__":
     # Initialize the GUI application
-    app = TempMailGUI()
+    app: TempMailGUI = TempMailGUI()
     app.mainloop()
