@@ -63,9 +63,6 @@ class TempMailGUI(CTk):
         self.__tempmail: TempMail = None # Temporary email object
         self.__inbox: dict = {} # Dictionary to store inbox messages
 
-        # Bring the application window to the front and ensure it is focused
-        self._raise_window()
-
         # Initialize master window
         self.title("TempMail")
         self._set_window_geometry()
@@ -256,12 +253,10 @@ class TempMailGUI(CTk):
         # Remove useless variables
         del SCREEN_WIDTH, SCREEN_HEIGHT, MASTER_WIDTH, MASTER_HEIGHT, X, Y
 
-    def _raise_window(self, load_content: bool = False) -> None:
+    def _raise_window(self) -> None:
         """
         Brings the window to the front and ensures it has focus.
-
-        Args:
-            load_content (bool): If True, it loads the new message content in the HtmlFrame.
+        And loads the new message content in the HtmlFrame.
         """
         # Bring the window to the front of other windows
         self.lift()
@@ -269,9 +264,8 @@ class TempMailGUI(CTk):
         # Force focus on the window to ensure it's the active window
         self.focus_force()
         
-        # Optionally activate the last item in the inbox list
-        if load_content:
-            self.inbox_list.activate(END)
+        # loads the new message content in the HtmlFrame.
+        self.inbox_list.activate(END)
 
     def _notification_popup(self, on_click: callable, *args) -> None:
         """
@@ -342,58 +336,80 @@ class TempMailGUI(CTk):
             self.HtmlFrame.load_html(self.__homepage)
             self.__is_on_homepage = True
 
-    def _click_on_free_space(self):
+    def _click_on_free_space(self) -> None:
         """
         Handles the event when the user clicks on free space in the application.
-        
+
         - Loads the homepage content into the HtmlFrame.
         - Attempts to deactivate the currently selected item in the inbox list.
+        If no item is selected, it silently handles the TypeError exception.
         """
-
+        # Load the homepage content into the HtmlFrame
         self._load_homepage()
 
         try:
+            # Attempt to deactivate the currently selected item in the inbox list
             self.inbox_list.deactivate(self.inbox_list.curselection())
         except TypeError:
+            # Silently handle the exception if no item is selected
             ...
 
     def _reset_to_default(self) -> None:
+        """
+        Resets the application to its default state.
+
+        - Loads the homepage content into the HtmlFrame.
+        - Clears all messages from the inbox list in the UI.
+        - Resets the inbox message counter to "0 Messages".
+        - Clears the internal inbox dictionary that stores email messages.
+        """
+        # Load the homepage content into the HtmlFrame
         self._load_homepage()
 
-        # Clear the inbox and inbox_list
+        # Clear the inbox list in the UI
         self.inbox_list.delete(0, END)
-        # Reset the Inbox counter
+        
+        # Reset the inbox message counter in the UI
         self.inbox_counter_lbl.configure(text=f"0 Messages")
-        # Clear the inbox dictionary
+        
+        # Clear the internal inbox dictionary
         self.__inbox.clear()
 
     def _is_online(self) -> bool:
         """
-        Checks if the device has an active internet connection by sending HTTP requests to two external URLs.
-        - The method tries to send GET requests to "https://google.com" and "http://mojeip.net.pl/asdfa/azenv.php".
-        - If either request returns a status code of 200 (indicating success), the method returns `True`.
-        - If an exception occurs (e.g., no internet connection), it returns `False`.
-        
+        Checks if the device has an active internet connection by sending HTTP GET requests to multiple external URLs.
+
+        - The method attempts to send GET requests to the following URLs:
+            1. "http://mojeip.net.pl/asdfa/azenv.php"
+            2. "https://github.com"
+            3. "https://google.com"
+        - If any of these requests return a status code of 200 (indicating success), the method concludes that the device is online and returns `True`.
+        - If all requests fail or an exception occurs (e.g., no internet connection), the method returns `False`.
+
         Returns:
-            bool: True if either of the requests is successful (status code 200), False otherwise.
+            bool: `True` if at least one request is successful (status code 200), otherwise `False`.
         """
         try:
-            
+            # Attempt to connect to the first URL
             response1 = get("http://mojeip.net.pl/asdfa/azenv.php", timeout=5)
             if response1.status_code == 200:
                 return True
-            
+
+            # Attempt to connect to the second URL
             response2 = get("https://github.com", timeout=5)
             if response2.status_code == 200:
                 return True
-            
+
+            # Attempt to connect to the third URL
             response3 = get("https://google.com", timeout=5)
             if response3.status_code == 200:
                 return True
-            
+
+            # If none of the requests succeed, return False
             return False
-        
+
         except:
+            # If an exception occurs (e.g., timeout, no connection), return False
             return False
 
     def update_connection_status(self) -> None:
@@ -475,30 +491,49 @@ class TempMailGUI(CTk):
    
     def update_inbox(self) -> None:
         """
-        Updates the inbox with new messages and displays them in the UI.
+        Periodically updates the inbox with new messages and displays them in the UI.
+
+        - Checks if the device is online and a temporary email address has been created.
+        - Retrieves all received messages from the temporary email service.
+        - Prevents duplicate messages by checking if the message header already exists in the inbox dictionary.
+        - Adds new messages to the internal inbox dictionary and displays them in the inbox list in the UI.
+        - Updates the inbox message counter in the UI to reflect the total number of messages.
+        - Displays a notification when a new message arrives, allowing the user to bring the program window to the front and view the message.
+
+        This method runs continuously in a loop and updates the inbox every 3 seconds.
         """
         while True:
-            if self.__connection_status and self.__tempmail: # if internet was connected and email was created
+            # Check if the device is online and a temporary email address has been created
+            if self.__connection_status and self.__tempmail:
 
-                # All received messages
-                mails = self.__tempmail.get_messages() 
+                # Retrieve all received messages
+                mails = self.__tempmail.get_messages()
 
                 for mail in mails:
+                    # Create a unique header for the message
                     header = f"{mail.subject}\n{mail.from_addr} <{mail.sent_time}>"
 
-                    if header not in self.__inbox: # Prevent duplicate message
+                    # Prevent duplicate messages by checking if the header already exists
+                    if header not in self.__inbox:
 
-                        # Add new message in inbox dictionary
-                        self.__inbox.update({header: mail.html}) 
-                        # Insert into the inbox list in UI
-                        self.inbox_list.insert(END, header) 
-                        # Update Inbox counter in UI
-                        self.inbox_counter_lbl.configure(text=f"{len(self.__inbox)} Messages") 
-                        # Show Notification when new message arrived
-                        self._notification_popup(lambda: self._raise_window(True),
-                                                "New Message", mail.from_addr, mail.subject)
+                        # Add the new message to the internal inbox dictionary
+                        self.__inbox.update({header: mail.html})
 
-            # Update inbox every 3 second
+                        # Insert the message header into the inbox list in the UI
+                        self.inbox_list.insert(END, header)
+
+                        # Update the inbox message counter in the UI
+                        self.inbox_counter_lbl.configure(text=f"{len(self.__inbox)} Messages")
+
+                        # Display a notification for the new message
+                        self._notification_popup(
+                            lambda: self._raise_window(True),
+                            "New Message",
+                            mail.from_addr,
+                            mail.subject
+                        )
+
+            # Wait for 3 seconds before checking for new messages again
             sleep(3)
 
     def _open_mails(self, header: str) -> None:
@@ -514,16 +549,28 @@ class TempMailGUI(CTk):
         self.__is_on_homepage = False
     
     def _on_closing(self) -> None:
+        """
+        Handles the application close event by performing cleanup operations.
+
+        - Deletes all global variables except essential ones like "__name__", "__file__", "__doc__", and "__builtins__".
+        - Deletes all local variables except "delete_locals".
+        - Destroys the application window.
+        - Exits the program using a low-level system exit to ensure complete termination.
+        """
+        # Delete all global variables except essential ones
         for var in list(globals().keys()):
             if var not in ["__name__", "__file__", "__doc__", "__builtins__"]:
                 del globals()[var]
         
+        # Delete all local variables except "delete_locals"
         for var in list(locals().keys()):
             if var != "delete_locals":
                 del locals()[var]
-    
+        
+        # Destroy the application window
         self.destroy()
         
+        # Exit the program completely
         from os import _exit
         _exit(0)
 
