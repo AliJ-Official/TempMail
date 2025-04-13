@@ -24,6 +24,7 @@
 
 ![](Screenshots/LightTheme.PNG)
 
+---
 ## 📂 Project Structure
 
 ```
