@@ -198,7 +198,7 @@ class TempMailGUI(CTk):
 
         try:
             # Try to load homepage from HTML file
-            with open("HomePage.html", "r") as f:
+            with open(self._resource_path("HomePage.html"), "r") as f:
                 self.__homepage = f.read()
 
         except FileNotFoundError:
@@ -247,9 +247,6 @@ class TempMailGUI(CTk):
 
         # Set the window size position and make it non-resizable
         self.geometry(f"{MASTER_WIDTH}x{MASTER_HEIGHT}+{X}+{Y}")
-
-        # Set the window to be non-resizable
-        self.resizable(False, False)
 
         # Remove useless variables
         del SCREEN_WIDTH, SCREEN_HEIGHT, MASTER_WIDTH, MASTER_HEIGHT, X, Y
@@ -327,6 +324,26 @@ class TempMailGUI(CTk):
         """
         self.clipboard_clear()
         self.clipboard_append(self.email_entry.get()) 
+
+    def _resource_path(self, relative_path: str) -> str:
+        """
+        Returns the absolute path of a resource file.
+
+        Args:
+            relative_path (str): The relative path of the resource file.
+
+        Returns:
+            str: The absolute path of the resource file.
+        """
+ 
+        try:
+            # Get the absolute path of the executable file
+            base_path = sys._MEIPASS
+        except AttributeError:
+            # If not running as a bundled executable, use the current directory
+            base_path = os.path.abspath(".")
+        # Join the base path with the relative path to get the full resource path
+        return os.path.join(base_path, relative_path)
 
     def _load_homepage(self) -> None:
         """
@@ -558,17 +575,20 @@ class TempMailGUI(CTk):
         # Create a confirmation popup window
         popup = CTkToplevel(self)
         popup.title("TempMail")
+        # Set the popup geometry first
         popup.geometry("280x130")
-        popup.resizable(False, False)
 
-        # Center the popup on the screen
-        popup.update_idletasks()
-        x = (popup.winfo_screenwidth() - popup.winfo_width()) // 2
-        y = (popup.winfo_screenheight() - popup.winfo_height()) // 2
+        # Calculate the center position
+        x = (self.winfo_screenwidth() - 20) // 2
+        y = (self.winfo_screenheight() - 40) // 2
+
+        # Apply the centered position
         popup.geometry(f"+{x}+{y}")
+        popup.resizable(False, False)
+        popup.update_idletasks()  # Ensure the geometry is updated
 
         # Set the popup icon
-        popup.after(190, lambda: popup.iconbitmap(Icons.tempmail_ico))
+        popup.after(200, lambda: popup.iconbitmap(Icons.tempmail_ico))
 
         # Add a label with the confirmation message
         CTkLabel(
@@ -624,5 +644,5 @@ class TempMailGUI(CTk):
 
 if __name__ == "__main__":
     # Initialize the GUI application
-    app: TempMailGUI = TempMailGUI()
+    app = TempMailGUI()
     app.mainloop()
