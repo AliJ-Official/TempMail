@@ -238,8 +238,8 @@ class TempMailGUI(CTk):
         SCREEN_HEIGHT = self.winfo_screenheight()
 
         # Calculate the window's width and height
-        MASTER_WIDTH = int(SCREEN_WIDTH * 0.80)
-        MASTER_HEIGHT = int(SCREEN_HEIGHT * 0.80)
+        MASTER_WIDTH = int(SCREEN_WIDTH * 0.85)
+        MASTER_HEIGHT = int(SCREEN_HEIGHT * 0.85)
 
         # Calculate the position to center the window
         X = (SCREEN_WIDTH - MASTER_WIDTH) // 2
@@ -427,8 +427,8 @@ class TempMailGUI(CTk):
                 self.connection_status_ico.configure(image=Icons.offline)
                 self.__connection_status = False
 
-            # Update connection status every 4 second
-            sleep(4)
+            # Update connection status every 3 second
+            sleep(3)
 
     def generate_email(self) -> None:
         """
@@ -548,34 +548,78 @@ class TempMailGUI(CTk):
         mail_html = self.__inbox[header]
         self.HtmlFrame.load_html(mail_html)
         self.__is_on_homepage = False
-    
+
     def _on_closing(self) -> None:
         """
-        Handles the application close event by performing cleanup operations.
-
-        - Deletes all global variables except essential ones like "__name__", "__file__", "__doc__", and "__builtins__".
-        - Deletes all local variables except "delete_locals".
-        - Destroys the application window.
-        - Exits the program using a low-level system exit to ensure complete termination.
+        Handles the application close event by displaying a confirmation popup.
+        The popup provides two options: "Quit" to exit the application and 
+        "Cancel" to return to the application.
         """
-        self.__is_tasks_running = False
+        # Create a confirmation popup window
+        popup = CTkToplevel(self)
+        popup.title("TempMail")
+        popup.geometry("280x130")
+        popup.resizable(False, False)
 
-        # Delete all global variables except essential ones
-        for var in list(globals().keys()):
-            if var not in ["__name__", "__file__", "__doc__", "__builtins__"]:
-                del globals()[var]
+        # Center the popup on the screen
+        popup.update_idletasks()
+        x = (popup.winfo_screenwidth() - popup.winfo_width()) // 2
+        y = (popup.winfo_screenheight() - popup.winfo_height()) // 2
+        popup.geometry(f"+{x}+{y}")
+
+        # Set the popup icon
+        popup.after(190, lambda: popup.iconbitmap(Icons.tempmail_ico))
+
+        # Add a label with the confirmation message
+        CTkLabel(
+            popup,
+            text="Quit TempMail?",
+            font=self.FONT(16, "bold"),
+            anchor="center"
+        ).pack(pady=20)
+
+        # Define the Quit button action
+        def quit_program():
+            self.__is_tasks_running = False  # Stop background tasks
+            
+            for var in list(globals().keys()):
+                if var not in ["__name__", "__file__", "__doc__", "__builtins__"]:
+                    del globals()[var]
         
-        # Delete all local variables except "delete_locals"
-        for var in list(locals().keys()):
-            if var != "delete_locals":
-                del locals()[var]
-        
-        # Destroy the application window
-        self.destroy()
-        
-        # Exit the program completely
-        from sys import exit as _exit
-        _exit(0)
+            for var in list(locals().keys()):
+                if var != "delete_locals":
+                    del locals()[var]
+
+            popup.destroy()  # Close the popup
+            self.destroy()  # Close the main application
+
+            from sys import exit as _exit
+            _exit(0)
+
+        # Add Quit and Cancel buttons
+        button_frame = CTkFrame(popup, fg_color="transparent")
+        button_frame.pack(pady=10, fill="x", expand=True)
+
+        CTkButton(
+            button_frame,
+            text="Quit",
+            command=quit_program,
+            width=100
+        ).pack(side="left", padx=20)
+
+        CTkButton(
+            button_frame,
+            text="Cancel",
+            command=popup.destroy,  # Close the popup
+            fg_color="gray",
+            hover_color="#666666",
+            width=100
+        ).pack(side="right", padx=20)
+
+        # Prevent interaction with the main window while the popup is open
+        popup.transient(self)
+        popup.grab_set()
+        self.wait_window(popup)
         
 
 if __name__ == "__main__":
