@@ -19,12 +19,14 @@
 - **Theme Support** – Switch between **light** and **dark** themes for a personalized experience.
 
 ---
+
 ## 📸 Screenshots
 ![](Screenshots/DarkTheme.PNG)
 
 ![](Screenshots/LightTheme.PNG)
 
 ---
+
 ## 📂 Project Structure
 
 ```
@@ -40,12 +42,24 @@
 ├── 📄 LICENSE  
 ├── 📄 README.md           # Project documentation
 ├── 📄 TempMail.py         # GUI application script
-└── 📄 requirements.txt    # Lists all required dependencies
+├── 📄 requirements.txt    # Lists all required dependencies
 ```
+
 ---
+
 ## 🛠️ Installation
 
-### 🔹 Automatic Installation (Recommended)
+### 🔹 Download the Release (Recommended)
+
+1. Visit the [Releases](https://github.com/AliJ-Official/TempMail/releases) page of this repository.
+2. Download the latest version of the program:
+   - **TempMail_2.0.1_x64.exe**: An installer file for setting up the program on your system.
+3. Run `TempMail_2.0.1_x64.exe` and follow the on-screen instructions to install the program.
+4. Once installed, you can launch the program from the Start Menu or Desktop shortcut.
+
+---
+
+### 🔹 Automatic Installation (For Developers)
 
 1. Clone the repository using this command:
    ```bash
@@ -58,11 +72,17 @@
 
 3. Ensure you have an active internet connection and run the **AutoInstaller.bat** script.
 
-5. Follow the on-screen instructions to select your Python version and complete the installation. You can run the program immediately.
+4. Follow the on-screen instructions to select your Python version and complete the installation.
+
+5. **Run via Python**:
+   - After installation, you can run the program using:
+     ```bash
+     python TempMail.py
+     ```
 
 ---
 
-### 🔹 Manual Installation
+### 🔹 Manual Installation (For Developers)
 
 1. Clone the repository using this command:
    ```bash
@@ -70,10 +90,9 @@
    ```
 - If you don't have git installed on your system, you can download the zip file from this [link](https://codeload.github.com/AliJ-Official/TempMail/zip/refs/heads/main) and follow the steps below.
 
-
 2. Navigate to the TempMail directory.
 
-3. Open powershell or cmd in TempMail directory.
+3. Open powershell or cmd in the TempMail directory.
 
 4. Create and activate a Virtual Environment (recommended):
    ```bash
@@ -86,12 +105,13 @@
    pip install -r requirements.txt
    ```
 
-6. Run the program:
-   ```bash
-   python TempMail.py
-   ```
+6. **Run via Python**:
+   - Run the program using:
+     ```bash
+     python TempMail.py
+     ```
 
-- To deactivate the Virtual Environment:
+7. To deactivate the Virtual Environment:
    ```bash
    deactivate
    ```
@@ -101,20 +121,6 @@
    .venv/Scripts/python.exe TempMail.py
    ```
 
----
-
-## 🚧 Limitations
-
-- **Third-Party Dependency**: TempMail relies on the [mail.tm API](https://mail.tm). If the API is down or unavailable, the program will not function as expected.
-- **Notifications Blocked**: TempMail uses system notifications to alert users about new emails and other events. If notifications are blocked in your Windows settings, these features will not work. 
-
-    ### How to Enable Notifications in Windows:
-   1. Open the **Settings** app on your Windows system.
-   2. Navigate to **System** > **Notifications & actions**.
-   3. Ensure the **Get notifications from apps and other senders** option is turned **On**.
-   4. Ensure that **Focus Assist** is turned off or configured to allow notifications.
-
-   By enabling notifications, you can ensure a better user experience with real-time alerts.
 ---
 
 ## 🤝 Contributing
