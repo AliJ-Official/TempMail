@@ -61,6 +61,7 @@
 ### 🔹 Automatic Installation (For Developers)
 
 1. Clone the repository using this command:
+
    ```bash
    git clone https://github.com/AliJ-Official/TempMail.git
    ```
@@ -80,6 +81,7 @@
 ### 🔹 Manual Installation (For Developers)
 
 1. Clone the repository using this command:
+
    ```bash
    git clone https://github.com/AliJ-Official/TempMail.git
    ```
