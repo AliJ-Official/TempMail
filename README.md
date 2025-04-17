@@ -52,9 +52,8 @@
 ### 🔹 Download the Release (Recommended)
 
 1. Visit the [Releases](https://github.com/AliJ-Official/TempMail/releases) page of this repository.
-2. Download the latest version of the program:
-   - **TempMail_2.0.1_x64.exe**: An installer file for setting up the program on your system.
-3. Run `TempMail_2.0.1_x64.exe` and follow the on-screen instructions to install the program.
+2. Download the latest version of the program: **TempMail_Setup_v2.1.0_x64.exe**
+3. Run the setup and follow the on-screen instructions to install the program.
 4. Once installed, you can launch the program from the Start Menu or Desktop shortcut.
 
 ---
@@ -74,11 +73,7 @@
 
 4. Follow the on-screen instructions to select your Python version and complete the installation.
 
-5. **Run via Python**:
-   - After installation, you can run the program using:
-     ```bash
-     python TempMail.py
-     ```
+5. You can run the program immediately or launch it manually later.
 
 ---
 
@@ -96,7 +91,10 @@
 
 4. Create and activate a Virtual Environment (recommended):
    ```bash
+   # Create a Virtual Environment
    python -m venv .venv
+
+   # Activate it
    .venv/Scripts/activate.bat
    ```
 
@@ -105,11 +103,10 @@
    pip install -r requirements.txt
    ```
 
-6. **Run via Python**:
-   - Run the program using:
-     ```bash
-     python TempMail.py
-     ```
+6. Run the program using:
+   ```bash
+   python TempMail.py
+   ```
 
 7. To deactivate the Virtual Environment:
    ```bash
