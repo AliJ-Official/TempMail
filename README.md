@@ -56,7 +56,6 @@
 3. Run the setup and follow the on-screen instructions to install the program.
 4. Once installed, you can launch the program from the Start Menu or Desktop shortcut.
 
----
 
 ### 🔹 Automatic Installation (For Developers)
 
@@ -76,7 +75,7 @@
 
 5. You can run the program immediately or launch it manually later.
 
----
+
 
 ### 🔹 Manual Installation (For Developers)
 
