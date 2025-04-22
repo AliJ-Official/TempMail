@@ -49,15 +49,16 @@
 
 ## 🛠️ Installation
 
-## 🔹 Download the Release (Recommended)
+### 🔹 Download the Release (Recommended)
 
 1. Visit the [Releases](https://github.com/AliJ-Official/TempMail/releases) page of this repository.
 2. Download the latest version of the program: **TempMail_Setup_v2.1.0_x64.exe**
 3. Run the setup and follow the on-screen instructions to install the program.
 4. Once installed, you can launch the program from the Start Menu or Desktop shortcut.
 
+---
 
-## 🔹 Automatic Installation (For Developers)
+### 🔹 Automatic Installation (For Developers)
 
 1. Clone the repository using this command:
 
@@ -75,9 +76,9 @@
 
 5. You can run the program immediately or launch it manually later.
 
+---
 
-
-## 🔹 Manual Installation (For Developers)
+### 🔹 Manual Installation (For Developers)
 
 1. Clone the repository using this command:
 
