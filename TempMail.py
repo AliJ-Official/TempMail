@@ -17,12 +17,14 @@ class Icons:
     Stores various icon images to be used within the application.
 
     Attributes:
-        sun (CTkImage): Icon representing a sun (light mode).
-        moon (CTkImage): Icon representing a moon (dark mode).
-        online (CTkImage): Icon representing an online status.
-        offline (CTkImage): Icon representing an offline status.
-        regenerate (CTkImage): Icon representing a regenerate action.
-        copy (CTkImage): Icon representing a copy action.
+        sun (CTkImage): Light mode toggle icon (25x25px).
+        moon (CTkImage): Dark mode toggle icon (25x25px).
+        online (CTkImage): Connection active status indicator (25x25px).
+        offline (CTkImage): Connection inactive status indicator (25x25px).
+        regenerate (CTkImage): Refresh/reload action icon (25x25px).
+        copy (CTkImage): Copy to clipboard action icon (40x40px).
+        tempmail_ico (str): Path to the application's .ico file for window icons.
+        tempmail_png (str): Path to the application's .PNG logo file.
     """
     sun = CTkImage(
             open_image("Icons\\sun.png"), size=(25, 25)
@@ -43,7 +45,6 @@ class Icons:
             open_image("Icons\\copy.png"), size=(40, 40)
             )
     tempmail_ico = "Icons\\TempMail.ico"
-
     tempmail_png = "Icons\\TempMail.png"
 
 
@@ -57,7 +58,7 @@ class TempMailGUI(CTk):
 
         # Initialize variables and flags
         self.__connection_status: bool = self._is_online() 
-        self.__is_generating_email: bool = True # Flag to prevent multiple email generations
+        self.__is_generating_email: bool = False # Flag to prevent multiple email generations
         self.__is_on_homepage: bool = False # Flag to check if the homepage is loaded
         self.__is_tasks_running: bool = True # Flag to handle the background tasks
         self.__homepage: str = None # HTML content for the homepage
@@ -190,7 +191,7 @@ class TempMailGUI(CTk):
         # Bind To Open The Links in Browser
         self.HtmlFrame.on_link_click(lambda url: open_in_browser(url))
         # Deactivating the mousewheel
-        self.unbind_all("<MouseWheel>")
+        self.HtmlFrame.unbind_all("<MouseWheel>")
 
         # Add InboxFrame and HTML-frame into PanedWindow
         self.PanedWindow.add(InboxFrame)
@@ -198,8 +199,8 @@ class TempMailGUI(CTk):
 
         try:
             # Try to load homepage from HTML file
-            with open(self._resource_path("HomePage.html"), "r") as f:
-                self.__homepage = f.read()
+            with open("HomePage.html", "r") as html:
+                self.__homepage = html.read()
 
         except FileNotFoundError:
             # If HTML file is not found, set a default 404 error message
@@ -217,15 +218,16 @@ class TempMailGUI(CTk):
         # Initialize background tasks
         background_tasks = [
             Agent(self.update_connection_status),
-            Agent(self.update_inbox),
-            Agent(self.generate_email) # one time task
+            Agent(self.update_inbox)
         ]
 
         # Initialize the Core class with the list of background tasks
         self.Core = Core(list_of_agents=background_tasks)
         # Run the background tasks
         self.Core.run()
-
+        # one time task
+        self.Core.add_task(Agent(self.generate_email)) 
+    
     def _set_window_geometry(self) -> None:
         """
         Sets the geometry (size and resolution) of the window based on the screen's
@@ -250,7 +252,7 @@ class TempMailGUI(CTk):
 
         # Remove useless variables
         del SCREEN_WIDTH, SCREEN_HEIGHT, MASTER_WIDTH, MASTER_HEIGHT, X, Y
-
+    
     def _raise_window(self) -> None:
         """
         Brings the window to the front and ensures it has focus.
@@ -324,27 +326,7 @@ class TempMailGUI(CTk):
         """
         self.clipboard_clear()
         self.clipboard_append(self.email_entry.get()) 
-
-    def _resource_path(self, relative_path: str) -> str:
-        """
-        Returns the absolute path of a resource file.
-
-        Args:
-            relative_path (str): The relative path of the resource file.
-
-        Returns:
-            str: The absolute path of the resource file.
-        """
- 
-        try:
-            # Get the absolute path of the executable file
-            base_path = sys._MEIPASS
-        except AttributeError:
-            # If not running as a bundled executable, use the current directory
-            base_path = os.path.abspath(".")
-        # Join the base path with the relative path to get the full resource path
-        return os.path.join(base_path, relative_path)
-
+            
     def _load_homepage(self) -> None:
         """
         Loads homepage HTML content into the HtmlFrame if it is not already loaded.
@@ -371,7 +353,7 @@ class TempMailGUI(CTk):
         except TypeError:
             # Silently handle the exception if no item is selected
             ...
-
+    
     def _reset_to_default(self) -> None:
         """
         Resets the application to its default state.
@@ -392,43 +374,35 @@ class TempMailGUI(CTk):
         
         # Reset the inbox message counter in the UI
         self.inbox_counter_lbl.configure(text=f"0 Messages")
-        
+
     def _is_online(self) -> bool:
         """
-        Checks if the device has an active internet connection by sending HTTP GET requests to multiple external URLs.
+        Check internet connectivity by attempting to connect to multiple reliable websites.
 
-        - The method attempts to send GET requests to the following URLs:
-            1. "http://mojeip.net.pl/asdfa/azenv.php"
-            2. "https://github.com"
-            3. "https://google.com"
-        - If any of these requests return a status code of 200 (indicating success), the method concludes that the device is online and returns `True`.
-        - If all requests fail or an exception occurs (e.g., no internet connection), the method returns `False`.
+        This method attempts to make HTTP requests to a predefined list of high-availability websites.
+        If any of the websites responds with a 200 OK status code, the device is considered online.
 
         Returns:
-            bool: `True` if at least one request is successful (status code 200), otherwise `False`.
+            bool: 
+                - True if any of the test URLs is reachable (device is online)
+                - False if all test URLs failed to respond (device may be offline)
         """
-        try:
-            # Attempt to connect to the first URL
-            response1 = get("http://mojeip.net.pl/asdfa/azenv.php", timeout=5)
-            if response1.status_code == 200:
-                return True
-
-            # Attempt to connect to the second URL
-            response2 = get("https://github.com", timeout=5)
-            if response2.status_code == 200:
-                return True
-
-            # Attempt to connect to the third URL
-            response3 = get("https://google.com", timeout=5)
-            if response3.status_code == 200:
-                return True
-
-            # If none of the requests succeed, return False
-            return False
-
-        except:
-            # If an exception occurs (e.g., timeout, no connection), return False
-            return False
+        urls = (
+            "https://www.cloudflare.com",
+            "https://www.google.com",
+            "https://github.com",
+        )
+        
+        for url in urls:
+            try:
+                response = get(url, timeout=5)
+                if response.status_code == 200:
+                    return True
+            except:
+                continue  # If this URL fails, try the next one
+        
+        # If we've tried all URLs and none succeeded
+        return False
 
     def update_connection_status(self) -> None:
         """
@@ -439,6 +413,10 @@ class TempMailGUI(CTk):
                 # If online, update the connection-status icon to online icon
                 self.connection_status_ico.configure(image=Icons.online)
                 self.__connection_status = True
+
+                if not (self.__tempmail or self.__is_generating_email):
+                    self.Core.add_task(Agent(self.generate_email))
+
             else:
                 # If offline, update the connection-status icon to offline icon
                 self.connection_status_ico.configure(image=Icons.offline)
@@ -454,7 +432,7 @@ class TempMailGUI(CTk):
         """
 
         # if device was online
-        if self.__connection_status and self.__is_tasks_running:
+        if self.__connection_status:
 
             self.__is_generating_email = True
 
@@ -472,8 +450,6 @@ class TempMailGUI(CTk):
                     self.email_entry.delete(0, END)
                     self.email_entry.insert(END, self.__tempmail.email)
 
-                    self.__is_generating_email = False
-
                     # Display a notification to inform the user
                     self._notification_popup(self._copy_in_clipboard,
                                             "Your email is ready!",
@@ -482,17 +458,32 @@ class TempMailGUI(CTk):
                                            )
                     
                     self._reset_to_default()
+                    self.__is_generating_email = False
+
                     break
 
                 except:
                     # if email generatig wasn't Successful
                     self.__tempmail = None
+                    
+                    if not self.__connection_status:
+                        self.__is_generating_email = False
+
+                        self.email_entry.configure(state=NORMAL)
+                        self.email_entry.delete(0, END)
+                        self.email_entry.insert(END, "Offline! Can't generate email.")
+                        self.email_entry.configure(state=DISABLED)
+
+                        break       
+                    
                     # Wait 3 seconds before retrying
                     sleep(3)
 
         else:
             # if device wasn't online
             self.__tempmail = None
+            self.__is_generating_email = False
+
             self.email_entry.configure(state=NORMAL)
             self.email_entry.delete(0, END)
             self.email_entry.insert(END, "Offline! Can't generate email.")
@@ -565,25 +556,20 @@ class TempMailGUI(CTk):
         mail_html = self.__inbox[header]
         self.HtmlFrame.load_html(mail_html)
         self.__is_on_homepage = False
+    
+    def _on_closing(self):
 
-    def _on_closing(self) -> None:
-        """
-        Handles the application close event by displaying a confirmation popup.
-        The popup provides two options: "Quit" to exit the application and 
-        "Cancel" to return to the application.
-        """
-        # Create a confirmation popup window
         popup = CTkToplevel(self)
         popup.title("TempMail")
-        # Set the popup geometry first
-        popup.geometry("280x130")
 
-        # Calculate the center position
-        x = (self.winfo_screenwidth() - 20) // 2
-        y = (self.winfo_screenheight() - 40) // 2
+        SCREEN_WIDTH = self.winfo_screenwidth()
+        SCREEN_HEIGHT = self.winfo_screenheight()
+        
+        # Calculate centered position with scaling
+        X = int(((SCREEN_WIDTH / 2) - (280 / 2)) * self._get_window_scaling())  # Horizontally centered
+        Y = int(((SCREEN_HEIGHT / 2) - (130 / 1.5)) * self._get_window_scaling())  # Vertically adjusted upward
 
-        # Apply the centered position
-        popup.geometry(f"+{x}+{y}")
+        popup.geometry(f"280x130+{X}+{Y}")
         popup.resizable(False, False)
         popup.update_idletasks()  # Ensure the geometry is updated
 
@@ -640,9 +626,8 @@ class TempMailGUI(CTk):
         popup.transient(self)
         popup.grab_set()
         self.wait_window(popup)
-        
 
-if __name__ == "__main__":
-    # Initialize the GUI application
+
+if __name__ == '__main__':
     app = TempMailGUI()
-    app.mainloop()
+    app.mainloop()    
