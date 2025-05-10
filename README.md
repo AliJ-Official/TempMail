@@ -37,12 +37,12 @@
 │   ├── 📄 TempMail_API.py # Handles application backend 
 │   └── 📄 CoreB.py        # Core functionality module
 ├── 📂 Screenshots         # Contains UI Screenshots
-├── 📄 AutoInstaller.bat  # AutoInstaller script for Windows
+├── 📄 AutoInstaller.bat   # AutoInstaller script for Windows
 ├── 📄 HomePage.html       # HomePage HTML file for UI
 ├── 📄 LICENSE  
 ├── 📄 README.md           # Project documentation
-├── 📄 TempMail.py         # GUI application script
-└── 📄 requirements.txt    # Lists all required dependencies
+├── 📄 requirements.txt    # Lists all required dependencies
+└─ ─📄 TempMail.py          # GUI application script
 ```
 
 ---
