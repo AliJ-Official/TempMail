@@ -1,3 +1,33 @@
+"""
+A Python module for managing temporary email accounts using the mail.tm API.
+
+This module provides programmatic access to disposable email functionality, allowing users to:
+- Create and manage temporary email accounts
+- Receive and parse emails with HTML format result
+- Automatically handle authentication and token management
+
+Key Features:
+─────────────────────────────────────────────────────────────────────────────────────────────
+• Automatic account generation with random credentials
+• Built-in HTML sanitization for safe content rendering
+• Rotating user-agent system to prevent API blocking
+• Timezone-aware timestamp conversion for received emails
+
+Classes:
+─────────────────────────────────────────────────────────────────────────────────────────────
+TempMail: Main class handling account creation, deletion, and message retrieval.
+Message:  Represents individual email messages with content processing methods.
+
+Constants:
+─────────────────────────────────────────────────────────────────────────────────────────────
+Fake_USER_AGENTS: List of 100+ browser user-agent strings for request rotation.
+
+Security Notes:
+─────────────────────────────────────────────────────────────────────────────────────────────
+• All API communication is encrypted via HTTPS
+• Default passwords are 18-character randomly generated
+"""
+
 from string import ascii_lowercase, ascii_uppercase, digits
 from datetime import datetime, timezone
 from random import choice, choices
