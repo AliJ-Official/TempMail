@@ -42,7 +42,7 @@
 ├── 📄 LICENSE  
 ├── 📄 README.md           # Project documentation
 ├── 📄 requirements.txt    # Lists all required dependencies
-└─ ─📄 TempMail.py          # GUI application script
+└── 📄 TempMail.py          # GUI application script
 ```
 
 ---
